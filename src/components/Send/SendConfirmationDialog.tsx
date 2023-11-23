@@ -98,6 +98,7 @@ const SendConfirmationDialog: React.FC<Props> = ({
       setIsApproving(true)
       try {
         const response = await approve(amountToApprove)
+        console.log(response)
         if (!response) return
 
         const { hash } = response.response
@@ -117,12 +118,19 @@ const SendConfirmationDialog: React.FC<Props> = ({
 
     setIsSending(true)
     try {
+      console.log(
+        amountToSend,
+        DestinationDomain[target as Chain],
+        address,
+        USDC_ADDRESS
+      )
       const response = await depositForBurn(
         amountToSend,
         DestinationDomain[target as Chain],
         address,
         USDC_ADDRESS
       )
+      console.log(response)
       if (!response) return
 
       const { hash } = response
@@ -167,7 +175,27 @@ const SendConfirmationDialog: React.FC<Props> = ({
         <Button size="large" color="secondary" onClick={handleClose}>
           BACK
         </Button>
-        {!isAllowanceSufficient ? (
+        <LoadingButton
+          size="large"
+          onClick={handleApprove}
+          disabled={
+            isApproving || CHAIN_TO_CHAIN_ID[formInputs.source] !== chainId
+          }
+          loading={isApproving}
+        >
+          APPROVE
+        </LoadingButton>
+        <LoadingButton
+          size="large"
+          onClick={handleSend}
+          disabled={
+            isSending || CHAIN_TO_CHAIN_ID[formInputs.source] !== chainId
+          }
+          loading={isSending}
+        >
+          SEND
+        </LoadingButton>
+        {/* {!isAllowanceSufficient ? (
           <LoadingButton
             size="large"
             onClick={handleApprove}
@@ -189,7 +217,7 @@ const SendConfirmationDialog: React.FC<Props> = ({
           >
             SEND
           </LoadingButton>
-        )}
+        )} */}
       </DialogActions>
 
       <IconButton className="absolute right-3 top-3" onClick={handleClose}>

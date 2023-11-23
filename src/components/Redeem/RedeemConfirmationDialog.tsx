@@ -54,6 +54,7 @@ const RedeemConfirmation: React.FC<Props> = ({
     } else {
       setIsRedeeming(true)
       try {
+        console.log(messageBytes, signature)
         const response = await receiveMessage(messageBytes, signature)
         if (!response) return
 
